@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>라즈베리파이 피코 AI 키트 가이드</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Gaegu:wght@300;400;700&family=Dongle:wght@300;400;700&display=swap');
+        
+        :root {
+            --color-fashion-1: #593C47;
+            --color-fashion-2: #F2E63D;
+            --color-fashion-3: #F2C53D;
+            --color-fashion-4: #F25C05;
+            --color-fashion-5: #F24405;
+            --color-dark: #334155;
+            --color-section: #1e40af;
+            --color-subtitle: #475569;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Gaegu', cursive;
+            background-color: #f9f9f9;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23593c47' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            color: var(--color-dark);
+            line-height: 1.4;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(89, 60, 71, 0.1);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--color-fashion-2), var(--color-fashion-3), var(--color-fashion-4), var(--color-fashion-5));
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed var(--color-fashion-1);
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-family: 'Dongle', sans-serif;
+            font-size: 42px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--color-fashion-1), var(--color-fashion-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title::after {
+            content: "💡";
+            position: absolute;
+            font-size: 32px;
+            top: -10px;
+            right: -40px;
+            transform: rotate(15deg);
+        }
+        
+        .date-source {
+            font-family: 'Nanum Pen Script', cursive;
+            color: var(--color-subtitle);
+            font-size: 16px;
+            padding: 8px 15px;
+            border: 2px solid var(--color-fashion-3);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .date-source::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-fashion-3);
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: var(--color-subtitle);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            font-family: 'Nanum Pen Script', cursive;
+        }
+        
+        .subtitle::before, .subtitle::after {
+            content: "✧";
+            color: var(--color-fashion-3);
+            margin: 0 10px;
+        }
+        
+        .columns {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .column {
+            width: 31%;
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .column {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--color-fashion-3);
+        }
+        
+        .card-1 .card-header {
+            background: var(--color-fashion-2);
+        }
+        
+        .card-2 .card-header {
+            background: var(--color-fashion-3);
+        }
+        
+        .card-3 .card-header {
+            background: var(--color-fashion-4);
+        }
+        
+        .card-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--color-fashion-1);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            transform: rotate(5deg);
+        }
+        
+        .card-title {
+            font-family: 'Dongle', sans-serif;
+            font-size: 28px;
+            color: var(--color-fashion-1);
+            margin: 15px 0 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .card-title::before {
+            content: "🔍";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .price {
+            font-family: 'Gaegu', cursive;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-fashion-5);
+            margin: 15px 0;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .price::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--color-fashion-2);
+            border-radius: 3px;
+            opacity: 0.5;
+            z-index: -1;
+        }
+        
+        .features {
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            position: relative;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            font-size: 16px;
+        }
+        
+        .feature-item::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-fashion-4);
+            font-weight: bold;
+        }
+        
+        .store {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 15px;
+            background: var(--color-fashion-1);
+            color: white;
+            border-radius: 30px;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .store:hover {
+            transform: scale(1.05);
+        }
+        
+        .store::before {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-20deg);
+            top: 0;
+            left: -50px;
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                left: -50px;
+            }
+            20% {
+                left: 150%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+        
+        .ribbon {
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .ribbon-text {
+            position: absolute;
+            left: -30px;
+            top: 30px;
+            width: 170px;
+            padding: 5px 0;
+            background: var(--color-fashion-3);
+            color: var(--color-fashion-1);
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            transform: rotate(-45deg);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .connections {
+            position: absolute;
+            top: 50%;
+            right: -50px;
+            width: 50px;
+            height: 2px;
+            background: var(--color-fashion-4);
+            z-index: 1;
+        }
+        
+        .connections::before, .connections::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            height: 2px;
+            width: 10px;
+            background: var(--color-fashion-4);
+        }
+        
+        .connections::before {
+            top: -3px;
+            transform: rotate(45deg);
+        }
+        
+        .connections::after {
+            top: 3px;
+            transform: rotate(-45deg);
+        }
+        
+        .notes {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(242, 230, 60, 0.1);
+            border-radius: 12px;
+            border: 1px dashed var(--color-fashion-3);
+            position: relative;
+        }
+        
+        .notes-title {
+            font-family: 'Dongle', sans-serif;
+            font-size: 24px;
+            color: var(--color-fashion-5);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .notes-title::before {
+            content: "📝";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .note-item {
+            position: relative;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            font-size: 14px;
+        }
+        
+        .note-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--color-fashion-4);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--color-fashion-1);
+            text-align: center;
+            font-size: 14px;
+            color: var(--color-subtitle);
+        }
+        
+        .highlight {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--color-fashion-3);
+            border-radius: 3px;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .hand-drawn {
+            position: relative;
+        }
+        
+        .hand-drawn::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid var(--color-fashion-1);
+            border-radius: 15px;
+            transform: rotate(-1deg);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">라즈베리파이 피코 AI 키트 조사</h1>
+            <div class="date-source">2025년 3월 7일 기준</div>
+        </header>
+        
+        <div class="subtitle">인공지능 학습을 위한 최적의, 가성비 좋은 라즈베리파이 피코 AI 키트 모음</div>
+        
+        <div class="columns">
+            <div class="column card-1">
+                <div class="card">
+                    <div class="card-header"></div>
+                    <div class="ribbon">
+                        <span class="ribbon-text">최저가!</span>
+                    </div>
+                    <div class="tag">1순위 초보자 추천</div>
+                    <h2 class="card-title">라즈베리파이 피코 AI 체험 키트</h2>
+                    <div class="price">13,200원 <span style="font-size: 14px;">(피코H 포함시 20,240원)</span></div>
+                    <div class="features">
+                        <div class="feature-item">티처블머신 기반 <span class="highlight">이미지 및 음성 인식</span> 학습</div>
+                        <div class="feature-item">LED, 서보 모듈 쉽게 제어</div>
+                        <div class="feature-item">피코,웹캠 미포함으로 노트북 사용 필수</div>
+                        <div class="feature-item">입문자에게 적합한 기본 학습 키트</div>
+                    </div>
+                    <div class="store" onclick="location.href=('https://www.devicemart.co.kr/goods/view?no=15445780&srsltid=AfmBOooZbl86iwB9h2W8H9xdhVRtnZDKUmNVPtiHjP1o9E13UwxfjImA')">디바이스마트 🛒</div>
+                </div>
+                <div class="connections"></div>
+            </div>
+            
+            <div class="column card-2">
+                <div class="card">
+                    <div class="card-header"></div>
+                    <div class="tag">교육용</div>
+                    <h2 class="card-title">라즈베리파이 피코 인공지능 키트</h2>
+                    <div class="price">49,000원</div>
+                    <div class="features">
+                        <div class="feature-item"><span class="highlight">인공지능 교육용</span>으로 최적화된 구성</div>
+                        <div class="feature-item">배송비 3,500원 (70,000원↑ 무료배송)</div>
+                        <div class="feature-item">무료 제공 예제가 없음</div>
+                        <div class="feature-item">교재 별도 구매</div>
+                    </div>
+                    <div class="store" onclick="location.href=('https://kocolabs2.cafe24.com/product/detail.html?product_no=130&cate_no=64&display_group=1')">코코랩스 🛒</div>
+                </div>
+                <div class="connections"></div>
+            </div>
+            
+            <div class="column card-3">
+                <div class="card">
+                    <div class="card-header"></div>
+                    <div class="tag">2순위 추천 종합 키트</div>
+                    <h2 class="card-title">라즈베리파이 피코 스타터 키트</h2>
+                    <div class="price">49,500원 <span style="font-size: 14px;">(피코H 포함시 56,540원)</span></div>
+                    <div class="features">
+                        <div class="feature-item"><span class="highlight">다양한 부품</span>이 포함된 종합 키트</div>
+                        <div class="feature-item">AI 프로젝트 확장성 우수</div>
+                        <div class="feature-item">피코 미포함</div>
+                        <div class="feature-item">프로젝트 완성도를 높이는 구성</div>
+                    </div>
+                    <div class="store" onclick="location.href=('https://www.icbanq.com/P012834536')">아이씨뱅큐 🛒</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="notes hand-drawn">
+            <h3 class="notes-title">추가 정보</h3>
+            <div class="note-item">MicroPython 프로그래밍을 활용한 DIY 프로젝트로 학생들의 창의성 개발에 적합합니다.</div>
+            <div class="note-item">라즈베리파이 피코 H는 디바이스마트,아이씨뱅큐에서 7,040원에 판매중입니다.</div>
+            <div class="note-item">라즈베리파이 피코2는 헤더핀 모델이 없어 직접납땜해야합니다.</div>
+            <div class="note-item">가격은 변동될 수 있으니 구매 전 최신 정보를 확인하는 것을 권장합니다.</div>
+        </div>
+        
+        <footer class="footer">
+            <p>© 2025 라즈베리파이 피코 AI 키트 가이드 | 자료 출처: 디바이스마트, 코코랩스, 아이씨뱅큐</p>
+        </footer>
+    </div>
+</body>
+</html>
